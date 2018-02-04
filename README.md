@@ -33,7 +33,7 @@ Run the file `bagsql.php` with PHP:
 $ php ./bagsql.php
 ```
 
-This will generate the file `postcodes.csv`, containing about 7.7 million addresses (addresses with suffices have been filtered out).
+This will generate the file `postcodes.csv`, containing about 7.7 million addresses (addresses with suffices have been removed).
 
 This will will need to be imported into the database table `{DB_PREFIX}nladdressfiller_postcodes`.
 You can create this table with the following DDL (make sure you replace the `{DB_PREFIX}` with your own):
@@ -51,7 +51,7 @@ CHARSET=utf8;
 
 ``` 
 Import the CSV into this database table. You can use command line tools like `mysqlimport`.
-PhpMyAdmin is the recommended graphical way to import the file, but be aware that it might take a couple of hours before all ~7.7 million row have been imported.
+PhpMyAdmin is the recommended graphical way to import the file, but be aware that it might take a couple of hours before all ~7.7 million rows have been imported.
 
 ### Building the module
 
