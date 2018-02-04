@@ -7,7 +7,7 @@
 
 Auto fill the streetname and city field when the postcode + number are known and speed up the checkout process.
 
-![docs/addressfiller.gif](Auto fill addresses)
+![Auto fill addresses](docs/addressfiller.gif)
 
 ### Installing the module
 
