@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 CWD_BASENAME=${PWD##*/}
 
+FILES=("LICENSE.md")
 FILES=("CONTRIBUTING.md")
 FILES+=("index.php")
 FILES+=("logo.gif")
