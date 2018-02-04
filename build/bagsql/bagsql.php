@@ -23,10 +23,13 @@ if (!isset($_GET['skipbag'])) {
     $streets = [];
     $cities = [];
 
-// Find postcode + numbers
+    // Find postcode + numbers
     $files = scandir(__DIR__.'/../bag/num');
     $total = count($files) - 2;
     echo "=== Processing postcodes and numbers\n";
+    if (!file_exists(__DIR__.'/data/')) {
+        mkdir(__DIR__.'/data/');
+    }
     $fp = fopen(__DIR__.'/data/num.csv', 'w');
     foreach ($files as $numfile) {
         // Skip . and ..
@@ -74,7 +77,7 @@ if (!isset($_GET['skipbag'])) {
     }
     fclose($fp);
 
-// Find streets
+    // Find streets
     $files = scandir(__DIR__.'/../bag/opr');
     $total = count($files) - 2;
     $fp = fopen(__DIR__.'/data/opr.csv', 'w');
@@ -112,7 +115,7 @@ if (!isset($_GET['skipbag'])) {
     }
     fclose($fp);
 
-// Find cities
+    // Find cities
     $files = scandir(__DIR__.'/../bag/wpl');
     $total = count($files) - 2;
     $fp = fopen(__DIR__.'/data/wpl.csv', 'w');
