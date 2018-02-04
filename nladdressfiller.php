@@ -640,7 +640,7 @@ class nladdressfiller extends Module
             ]));
         }
         $addresses = array_map('str_getcsv', explode("\n", $addresses));
-        foreach (array_chunk($addresses, 300) as $chunk) {
+        foreach (array_chunk($addresses, 340) as $chunk) {
             $insert = [];
             foreach ($chunk as $address) {
                 $insert[] = [
