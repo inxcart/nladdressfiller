@@ -25,10 +25,10 @@
   $(document).ready(function () {
     // Show/hide autofill
     function autoFill() {
-      $('#mppc_manualbtn').show();
-      $('#mppc_autobtn').hide();
+      $('#nlaf_manualbtn').show();
+      $('#nlaf_autobtn').hide();
 
-      $('.mppc_autocomplete').show();
+      $('.nlaf_autocomplete').show();
 
       if ($('#address').length) {
         $('#address').parent().hide();
@@ -48,10 +48,10 @@
     }
 
     function manualFill() {
-      $('#mppc_manualbtn').hide();
-      $('#mppc_autobtn').show();
+      $('#nlaf_manualbtn').hide();
+      $('#nlaf_autobtn').show();
 
-      $('.mppc_autocomplete').hide();
+      $('.nlaf_autocomplete').hide();
 
       $('#address1').attr('type', 'text');
       $('#postcode').attr('type', 'text');
@@ -105,13 +105,13 @@
     });
 
     // If manual checkbox changes
-    $('#mppc_manualbtn').click(manualFill);
-    $('#mppc_autobtn').click(autoFill);
+    $('#nlaf_manualbtn').click(manualFill);
+    $('#nlaf_autobtn').click(autoFill);
 
     $('.mpauto').keyup(function () {
-      var postcode = $('#mppc_postcode').val().replace(/\s/g, "");
-      var housenr = $('#mppc_housenr').val().replace(/(^\d+)(.*?$)/i, '$1');
-      var addition = $('#mppc_housenr').val().replace(/(^\d+)(.*?$)/i, '$2');
+      var postcode = $('#nlaf_postcode').val().replace(/\s/g, "");
+      var housenr = $('#nlaf_housenr').val().replace(/(^\d+)(.*?$)/i, '$1');
+      var addition = $('#nlaf_housenr').val().replace(/(^\d+)(.*?$)/i, '$2');
 
       if (postcode.length >= 6 && housenr.length != 0) {
         lastCall = $.now();

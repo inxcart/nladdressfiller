@@ -33,10 +33,10 @@
       window.nladdressfiller.animDuration = 'fast';
 
       function autoFill() {
-        $('#mppc_manualbtn').parent().show();
-        $('#mppc_autobtn').parent().hide();
+        $('#nlaf_manualbtn').parent().show();
+        $('#nlaf_autobtn').parent().hide();
 
-        $('.mppc_autocomplete').show(window.nladdressfiller.animDuration, function () {
+        $('.nlaf_autocomplete').show(window.nladdressfiller.animDuration, function () {
           $('#address1').parent().hide(window.nladdressfiller.animDuration);
           $('#postcode').parent().hide(window.nladdressfiller.animDuration);
           $('#city').parent().hide(window.nladdressfiller.animDuration);
@@ -47,10 +47,10 @@
       }
 
       function manualFill() {
-        $('#mppc_manualbtn').parent().hide();
-        $('#mppc_autobtn').parent().show();
+        $('#nlaf_manualbtn').parent().hide();
+        $('#nlaf_autobtn').parent().show();
 
-        $('.mppc_autocomplete').hide(window.nladdressfiller.animDuration, function () {
+        $('.nlaf_autocomplete').hide(window.nladdressfiller.animDuration, function () {
           $('#address1').attr('type', 'text');
           $('#postcode').attr('type', 'text');
           $('#city').attr('type', 'text');
@@ -102,9 +102,9 @@
         window.nladdressfiller.resultsColor = $('#mpresults').css('color');
 
         // If manual checkbox changes
-        $('#mppc_manualbtn')
+        $('#nlaf_manualbtn')
           .click(manualFill);
-        $('#mppc_autobtn')
+        $('#nlaf_autobtn')
           .click(autoFill);
 
         if (/[?&]id_address/.test(location.href)) {
@@ -114,9 +114,9 @@
         }
 
         $('.mpauto').keyup(function () {
-          var postcode = $('#mppc_postcode').val().replace(/\s/g, "");
-          var housenr = $('#mppc_housenr').val().replace(/(^\d+)(.*?$)/i, '$1');
-          var addition = $('#mppc_housenr').val().replace(/(^\d+)(.*?$)/i, '$2');
+          var postcode = $('#nlaf_postcode').val().replace(/\s/g, "");
+          var housenr = $('#nlaf_housenr').val().replace(/(^\d+)(.*?$)/i, '$1');
+          var addition = $('#nlaf_housenr').val().replace(/(^\d+)(.*?$)/i, '$2');
 
           if (postcode.length >= 6 && housenr.length != 0) {
             if (window.nladdressfiller.xhr != null && typeof window.nladdressfiller.xhr.abort === 'function') {

@@ -17,21 +17,21 @@
 *}
 {strip}
   <div id="delivery_nladdressfiller">
-    <div id="mppc_delivery_autocomplete">
+    <div id="nlaf_delivery_autocomplete">
       <tr id="mp_delivery_postcode">
         <td>
           <p class="text">
-            <label for="delivery_mppc_postcode">{l s='Postcode:' mod='nladdressfiller'}</label>
+            <label for="delivery_nlaf_postcode">{l s='Postcode:' mod='nladdressfiller'}</label>
             <sup id="sup_delivery_mp_postcode">*</sup>
-            <input class="form-control delivery_mpauto" type="text" id="delivery_mppc_postcode">
+            <input class="form-control delivery_mpauto" type="text" id="delivery_nlaf_postcode">
         </td>
       </tr>
       <tr id="mp_delivery_housenr">
         <td>
           <p class="text">
-            <label for="delivery_mppc_housenr">{l s='House number + addition:' mod='nladdressfiller'}</label>
+            <label for="delivery_nlaf_housenr">{l s='House number + addition:' mod='nladdressfiller'}</label>
             <sup id="sup_delivery_mp_housenr">*</sup>
-            <input class="form-control delivery_mpauto" type="text" id="delivery_mppc_housenr">
+            <input class="form-control delivery_mpauto" type="text" id="delivery_nlaf_housenr">
         </td>
       </tr>
       <p class="textarea mpresultsarea">
@@ -42,15 +42,15 @@
     </div>
     {if $nladdressfiller_enable_man}
       <p class="text">
-        <label for="delivery_mppc_manualbtn"></label>
-        <button type="button" class="mpbtn" id="delivery_mppc_manualbtn" tabindex="-1">
+        <label for="delivery_nlaf_manualbtn"></label>
+        <button type="button" class="mpbtn" id="delivery_nlaf_manualbtn" tabindex="-1">
           {l s='Enter address manually' mod='nladdressfiller'}
         </button>
 
       </p>
       <p class="text">
-        <label for="delivery_mppc_autobtn"></label>
-        <button type="button" class="mpbtn" id="delivery_mppc_autobtn" tabindex="-1">
+        <label for="delivery_nlaf_autobtn"></label>
+        <button type="button" class="mpbtn" id="delivery_nlaf_autobtn" tabindex="-1">
           {l s='Enter address automatically' mod='nladdressfiller'}
         </button>
       </p>

@@ -17,21 +17,21 @@
 *}
 {strip}
   <div id="invoice_nladdressfiller">
-    <div id="mppc_invoice_autocomplete">
+    <div id="nlaf_invoice_autocomplete">
       <tr id="mp_invoice_postcode">
         <td>
           <p class="text">
-            <label for="invoice_mppc_postcode">{l s='Postcode:' mod='nladdressfiller'}</label>
+            <label for="invoice_nlaf_postcode">{l s='Postcode:' mod='nladdressfiller'}</label>
             <sup id="sup_delivery_mp_postcode">*</sup>
-            <input class="form-control invoice_mpauto" type="text" id="invoice_mppc_postcode">
+            <input class="form-control invoice_mpauto" type="text" id="invoice_nlaf_postcode">
         </td>
       </tr>
       <tr id="mp_invoice_housenr">
         <td>
           <p class="text">
-            <label for="invoice_mppc_housenr">{l s='House number + addition:' mod='nladdressfiller'}</label>
+            <label for="invoice_nlaf_housenr">{l s='House number + addition:' mod='nladdressfiller'}</label>
             <sup id="sup_invoice_mp_housenr">*</sup>
-            <input class="form-control invoice_mpauto" type="text" id="invoice_mppc_housenr">
+            <input class="form-control invoice_mpauto" type="text" id="invoice_nlaf_housenr">
         </td>
       </tr>
       <p class="textarea mpresultsarea">
@@ -42,15 +42,15 @@
     </div>
     {if $nladdressfiller_enable_man}
       <p class="text">
-        <label for="invoice_mppc_manualbtn"></label>
-        <button type="button" class="mpbtn" id="invoice_mppc_manualbtn" tabindex="-1">
+        <label for="invoice_nlaf_manualbtn"></label>
+        <button type="button" class="mpbtn" id="invoice_nlaf_manualbtn" tabindex="-1">
           {l s='Enter address manually' mod='nladdressfiller'}
         </button>
 
       </p>
       <p class="text">
-        <label for="invoice_mppc_autobtn"></label>
-        <button type="button" class="mpbtn" id="invoice_mppc_autobtn" tabindex="-1">
+        <label for="invoice_nlaf_autobtn"></label>
+        <button type="button" class="mpbtn" id="invoice_nlaf_autobtn" tabindex="-1">
           {l s='Enter address automatically' mod='nladdressfiller'}
         </button>
       </p>

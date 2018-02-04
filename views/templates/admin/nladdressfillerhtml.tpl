@@ -18,22 +18,22 @@
 *}
 {strip}
   <div id="nladdressfiller" class="col-md-12">
-    <div class="mppc_autocomplete">
+    <div class="nlaf_autocomplete">
       <div style="display: block;" class="form-group">
         <label class="control-label col-lg-3 required"
-               for="mppc_postcode">{l s='Postcode' mod='nladdressfiller'}</label>
+               for="nlaf_postcode">{l s='Postcode' mod='nladdressfiller'}</label>
         <div class="col-lg-2">
-          <input class="is_required form-control mpauto" type="text" id="mppc_postcode" required>
+          <input class="is_required form-control mpauto" type="text" id="nlaf_postcode" required>
         </div>
       </div>
       <div style="display: block;" class="form-group">
         <label class="control-label col-lg-3 required"
-               for="mppc_housenr"
+               for="nlaf_housenr"
         >
           {l s='House number + addition' mod='nladdressfiller'}
         </label>
         <div class="col-lg-2">
-          <input class="is_required form-control mpauto" type="text" id="mppc_housenr" required>
+          <input class="is_required form-control mpauto" type="text" id="nlaf_housenr" required>
         </div>
       </div>
       <div style="display: block;" class="form-group">
@@ -45,12 +45,12 @@
       <div class="clearfix"></div>
     </div>
     <div class="form-group">
-      <label class="control-label col-lg-3" for="mppc_manualbtn"></label>
+      <label class="control-label col-lg-3" for="nlaf_manualbtn"></label>
       <div class="col-lg-2">
-        <a class="btn btn-default button button-small" id="mppc_manualbtn">
+        <a class="btn btn-default button button-small" id="nlaf_manualbtn">
           <span>{l s='Fill out address manually' mod='nladdressfiller'} <i class="icon-chevron-right right"></i></span>
         </a>
-        <a class="btn btn-default button button-small" id="mppc_autobtn">
+        <a class="btn btn-default button button-small" id="nlaf_autobtn">
           <span>{l s='Fill out address automatically' mod='nladdressfiller'} <i class="icon-chevron-right right"></i></span>
         </a>
       </div>

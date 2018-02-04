@@ -45,10 +45,10 @@
         $(window.nladdressfiller.deliveryPostcodeField){if isset($nladdressfiller_parent) && $nladdressfiller_parent}.parent(){/if}.attr('type', 'hidden');
         $(window.nladdressfiller.deliveryCityField){if isset($nladdressfiller_parent) && $nladdressfiller_parent}.parent(){/if}.attr('type', 'hidden');
 
-        $('#delivery_mppc_manualbtn').show();
-        $('#delivery_mppc_autobtn').hide();
+        $('#delivery_nlaf_manualbtn').show();
+        $('#delivery_nlaf_autobtn').hide();
 
-        $('#mppc_delivery_autocomplete').show();
+        $('#nlaf_delivery_autocomplete').show();
       }
 
       function deliveryManualFill() {
@@ -59,10 +59,10 @@
         $(window.nladdressfiller.deliveryPostcodeField){if isset($nladdressfiller_parent) && $nladdressfiller_parent}.parent(){/if}.show();
         $(window.nladdressfiller.deliveryCityField){if isset($nladdressfiller_parent) && $nladdressfiller_parent}.parent(){/if}.show();
 
-        $('#delivery_mppc_manualbtn').hide();
-        $('#delivery_mppc_autobtn').show();
+        $('#delivery_nlaf_manualbtn').hide();
+        $('#delivery_nlaf_autobtn').show();
 
-        $('#mppc_delivery_autocomplete').hide();
+        $('#nlaf_delivery_autocomplete').hide();
       }
 
       function invoiceAutoFill() {
@@ -74,10 +74,10 @@
         $(window.nladdressfiller.invoiceCityField){if isset($nladdressfiller_parent) && $nladdressfiller_parent}.parent(){/if}.hide();
 
 
-        $('#invoice_mppc_manualbtn').show();
-        $('#invoice_mppc_autobtn').hide();
+        $('#invoice_nlaf_manualbtn').show();
+        $('#invoice_nlaf_autobtn').hide();
 
-        $('#mppc_invoice_autocomplete').show();
+        $('#nlaf_invoice_autocomplete').show();
       }
 
       function invoiceManualFill() {
@@ -88,10 +88,10 @@
         $(window.nladdressfiller.invoicePostcodeField){if isset($nladdressfiller_parent) && $nladdressfiller_parent}.parent(){/if}.show();
         $(window.nladdressfiller.invoiceCityField){if isset($nladdressfiller_parent) && $nladdressfiller_parent}.parent(){/if}.show();
 
-        $('#invoice_mppc_manualbtn').hide();
-        $('#invoice_mppc_autobtn').show();
+        $('#invoice_nlaf_manualbtn').hide();
+        $('#invoice_nlaf_autobtn').show();
 
-        $('#mppc_invoice_autocomplete').hide();
+        $('#nlaf_invoice_autocomplete').hide();
       }
 
 
@@ -162,10 +162,10 @@
         $('#invoice_nladdressfiller').show();
 
         {* If manual checkbox changes *}
-        $('#delivery_mppc_manualbtn').click(deliveryManualFill);
-        $('#delivery_mppc_autobtn').click(deliveryAutoFill);
-        $('#invoice_mppc_manualbtn').click(invoiceManualFill);
-        $('#invoice_mppc_autobtn').click(invoiceAutoFill);
+        $('#delivery_nlaf_manualbtn').click(deliveryManualFill);
+        $('#delivery_nlaf_autobtn').click(deliveryAutoFill);
+        $('#invoice_nlaf_manualbtn').click(invoiceManualFill);
+        $('#invoice_nlaf_autobtn').click(invoiceAutoFill);
 
         if (/[?&]delivery_id_address/.test(location.href)) {
           setTimeout(deliveryManualFill, 100);
@@ -179,9 +179,9 @@
         }
 
         $('.delivery_mpauto').keyup(function () {
-          var postcode = $('#delivery_mppc_postcode').val().replace(/\s/g, "");
-          var housenr = $('#delivery_mppc_housenr').val().replace(/(^\d+)(.*?$)/i, '$1');
-          var addition = $('#delivery_mppc_housenr').val().replace(/(^\d+)(.*?$)/i, '$2');
+          var postcode = $('#delivery_nlaf_postcode').val().replace(/\s/g, "");
+          var housenr = $('#delivery_nlaf_housenr').val().replace(/(^\d+)(.*?$)/i, '$1');
+          var addition = $('#delivery_nlaf_housenr').val().replace(/(^\d+)(.*?$)/i, '$2');
 
           if (postcode.length >= 6 && housenr.length != 0) {
             if (window.nladdressfiller.xhr != null && typeof window.nladdressfiller.xhr.abort === 'function') {
@@ -215,9 +215,9 @@
         });
 
         $('.invoice_mpauto').keyup(function () {
-          var postcode = $('#invoice_mppc_postcode').val().replace(/\s/g, "");
-          var housenr = $('#invoice_mppc_housenr').val().replace(/(^\d+)(.*?$)/i, '$1');
-          var addition = $('#invoice_mppc_housenr').val().replace(/(^\d+)(.*?$)/i, '$2');
+          var postcode = $('#invoice_nlaf_postcode').val().replace(/\s/g, "");
+          var housenr = $('#invoice_nlaf_housenr').val().replace(/(^\d+)(.*?$)/i, '$1');
+          var addition = $('#invoice_nlaf_housenr').val().replace(/(^\d+)(.*?$)/i, '$2');
 
           if (postcode.length >= 6 && housenr.length != 0) {
             if (window.nladdressfiller.xhr != null && typeof window.nladdressfiller.xhr.abort === 'function') {

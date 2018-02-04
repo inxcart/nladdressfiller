@@ -39,11 +39,11 @@
         $('#postcode').attr('type', 'hidden');
         $('#city').attr('type', 'hidden');
 
-        $('#mppc_manualbtn').show();
-        $('#mppc_autobtn').hide();
+        $('#nlaf_manualbtn').show();
+        $('#nlaf_autobtn').hide();
 
-        $('.mppc_autocomplete').show();
-        $('.mppc_manualcomplete').hide();
+        $('.nlaf_autocomplete').show();
+        $('.nlaf_manualcomplete').hide();
 
         $('.mpresults-container').show();
       }
@@ -56,11 +56,11 @@
         $('#postcode').parent().show();
         $('#city').parent().show();
 
-        $('#mppc_manualbtn').hide();
-        $('#mppc_autobtn').show();
+        $('#nlaf_manualbtn').hide();
+        $('#nlaf_autobtn').show();
 
-        $('.mppc_autocomplete').hide();
-        $('.mppc_manualcomplete').show();
+        $('.nlaf_autocomplete').hide();
+        $('.nlaf_manualcomplete').show();
 
         $('.mpresults-container').hide();
       }
@@ -73,11 +73,11 @@
         $('#postcode_invoice').attr('type', 'hidden');
         $('#city_invoice').attr('type', 'hidden');
 
-        $('#mppc_manualbtn_invoice').show();
-        $('#mppc_autobtn_invoice').hide();
+        $('#nlaf_manualbtn_invoice').show();
+        $('#nlaf_autobtn_invoice').hide();
 
-        $('.mppc_autocomplete_invoice').show();
-        $('.mppc_manualcomplete_invoice').hide();
+        $('.nlaf_autocomplete_invoice').show();
+        $('.nlaf_manualcomplete_invoice').hide();
 
         $('.mpresults-invoice-container').show();
       }
@@ -90,11 +90,11 @@
         $('#postcode_invoice').parent().show();
         $('#city_invoice').parent().show();
 
-        $('#mppc_manualbtn_invoice').hide();
-        $('#mppc_autobtn_invoice').show();
+        $('#nlaf_manualbtn_invoice').hide();
+        $('#nlaf_autobtn_invoice').show();
 
-        $('.mppc_autocomplete_invoice').hide();
-        $('.mppc_manualcomplete_invoice').show();
+        $('.nlaf_autocomplete_invoice').hide();
+        $('.nlaf_manualcomplete_invoice').show();
 
         $('.mpresults-invoice-container').hide();
       }
@@ -151,8 +151,8 @@
           }, 100);
         } else {
           deliveryManualFill();
-          $('.mppc_autocomplete').hide();
-          $('.mppc_manualcomplete').hide();
+          $('.nlaf_autocomplete').hide();
+          $('.nlaf_manualcomplete').hide();
         }
       }
 
@@ -173,8 +173,8 @@
           }, 100);
         } else {
           invoiceManualFill();
-          $('.mppc_autocomplete_invoice').hide();
-          $('.mppc_manualcomplete_invoice').hide();
+          $('.nlaf_autocomplete_invoice').hide();
+          $('.nlaf_manualcomplete_invoice').hide();
         }
       }
 
@@ -196,32 +196,32 @@
         });
 
         // If manual checkbox changes
-        $('#mppc_manualbtn').click(deliveryManualFill);
-        $('#mppc_autobtn').click(deliveryAutoFill);
-        $('#mppc_manualbtn_invoice').click(invoiceManualFill);
-        $('#mppc_autobtn_invoice').click(invoiceAutoFill);
+        $('#nlaf_manualbtn').click(deliveryManualFill);
+        $('#nlaf_autobtn').click(deliveryAutoFill);
+        $('#nlaf_manualbtn_invoice').click(invoiceManualFill);
+        $('#nlaf_autobtn_invoice').click(invoiceAutoFill);
 
         // Init validation
-        fields_definition.mppc_postcode = [true, 'isPostcode', 6];
-        fields_definition.mppc_postcode_invoice = [true, 'isPostcode', 6];
+        fields_definition.nlaf_postcode = [true, 'isPostcode', 6];
+        fields_definition.nlaf_postcode_invoice = [true, 'isPostcode', 6];
 
-        $('#mppc_postcode').blur(function () {
+        $('#nlaf_postcode').blur(function () {
           validateFieldAndDisplayInline($(this));
         });
-        $('#mppc_housenr').blur(function () {
+        $('#nlaf_housenr').blur(function () {
           validateFieldAndDisplayInline($(this));
         });
-        $('#mppc_postcode_invoice').blur(function () {
+        $('#nlaf_postcode_invoice').blur(function () {
           validateFieldAndDisplayInline($(this));
         });
-        $('#mppc_housenr_invoice').blur(function () {
+        $('#nlaf_housenr_invoice').blur(function () {
           validateFieldAndDisplayInline($(this));
         });
 
         $('.mpauto').change(function () {
-          var postcode = $('#mppc_postcode').val().replace(/\s/g, "");
-          var housenr = $('#mppc_housenr').val().replace(/(^\d+)(.*?$)/i, '$1');
-          var addition = $('#mppc_housenr').val().replace(/(^\d+)(.*?$)/i, '$2');
+          var postcode = $('#nlaf_postcode').val().replace(/\s/g, "");
+          var housenr = $('#nlaf_housenr').val().replace(/(^\d+)(.*?$)/i, '$1');
+          var addition = $('#nlaf_housenr').val().replace(/(^\d+)(.*?$)/i, '$2');
 
           if (postcode.length >= 6 && housenr.length != 0) {
             if (window.nladdressfiller.xhr != null && typeof window.nladdressfiller.xhr.abort === 'function') {
@@ -261,9 +261,9 @@
         });
 
         $('.mpauto_invoice').change(function () {
-          var postcode = $('#mppc_postcode_invoice').val().replace(/\s/g, "");
-          var housenr = $('#mppc_housenr_invoice').val().replace(/(^\d+)(.*?$)/i, '$1');
-          var addition = $('#mppc_housenr_invoice').val().replace(/(^\d+)(.*?$)/i, '$2');
+          var postcode = $('#nlaf_postcode_invoice').val().replace(/\s/g, "");
+          var housenr = $('#nlaf_housenr_invoice').val().replace(/(^\d+)(.*?$)/i, '$1');
+          var addition = $('#nlaf_housenr_invoice').val().replace(/(^\d+)(.*?$)/i, '$2');
 
           if (postcode.length >= 6 && housenr.length != 0) {
             if (window.nladdressfiller != null && typeof window.nladdressfiller.xhr.abort === 'function') {

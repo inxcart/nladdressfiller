@@ -17,21 +17,21 @@
 *}
 {strip}
   <div id="invoice_nladdressfiller">
-    <div id="mppc_invoice_autocomplete">
+    <div id="nlaf_invoice_autocomplete">
       <div id="mp_invoice_postcode" class="form-group col-xs-12 required">
-        <label for="invoice_mppc_postcode">
+        <label for="invoice_nlaf_postcode">
           {l s='Postcode:' mod='nladdressfiller'}
           <sup>*</sup>
         </label>
-        <input id="invoice_mppc_postcode" name="mppc_invoice_postcode" type="text"
+        <input id="invoice_nlaf_postcode" name="nlaf_invoice_postcode" type="text"
                class="invoice_mpauto invoice form-control input-sm">
       </div>
       <div id="mp_invoice_housenr" class="form-group col-xs-12 required">
-        <label for="invoice_mppc_housenr">
+        <label for="invoice_nlaf_housenr">
           {l s='House number + addition:' mod='nladdressfiller'}
           <sup>*</sup>
         </label>
-        <input id="invoice_mppc_housenr" name="mppc_invoice_housenr" type="text"
+        <input id="invoice_nlaf_housenr" name="nlaf_invoice_housenr" type="text"
                class="invoice_mpauto invoice form-control input-sm">
       </div>
       <div>
@@ -42,15 +42,15 @@
     </div>
     {if $nladdressfiller_enable_man}
       <p class="text">
-        <label for="invoice_mppc_manualbtn"></label>
-        <button type="button" class="btn btn-default" id="invoice_mppc_manualbtn" tabindex="-1">
+        <label for="invoice_nlaf_manualbtn"></label>
+        <button type="button" class="btn btn-default" id="invoice_nlaf_manualbtn" tabindex="-1">
           {l s='Enter address manually' mod='nladdressfiller'}
         </button>
 
       </p>
       <p class="text">
-        <label for="invoice_mppc_autobtn"></label>
-        <button type="button" class="btn btn-default" id="invoice_mppc_autobtn" tabindex="-1">
+        <label for="invoice_nlaf_autobtn"></label>
+        <button type="button" class="btn btn-default" id="invoice_nlaf_autobtn" tabindex="-1">
           {l s='Enter address automatically' mod='nladdressfiller'}
         </button>
       </p>

@@ -17,18 +17,18 @@
 *}
 {strip}
   <div id="delivery_nladdressfiller">
-    <div class="mppc_autocomplete">
+    <div class="nlaf_autocomplete">
       <div class="required form-group" style="display: block;">
-        <label for="delivery_mppc_postcode">{l s='Postcode' mod='nladdressfiller'}
+        <label for="delivery_nlaf_postcode">{l s='Postcode' mod='nladdressfiller'}
           <sup>*</sup>
         </label>
-        <input class="is_required form-control mpauto" type="text" id="delivery_mppc_postcode">
+        <input class="is_required form-control mpauto" type="text" id="delivery_nlaf_postcode">
       </div>
       <div class="required form-group" style="display: block;">
-        <label for="delivery_mppc_housenr">{l s='House number + addition' mod='nladdressfiller'}
+        <label for="delivery_nlaf_housenr">{l s='House number + addition' mod='nladdressfiller'}
           <sup>*</sup>
         </label>
-        <input class="is_required form-control mpauto" type="text" id="delivery_mppc_housenr">
+        <input class="is_required form-control mpauto" type="text" id="delivery_nlaf_housenr">
       </div>
       <br/>
 
@@ -42,13 +42,13 @@
     <p>
       {if $nladdressfiller_enable_man}
     <div>
-      <button type="button" class="btn btn-default button button-small" id="delivery_mppc_manualbtn" tabindex="-1">
+      <button type="button" class="btn btn-default button button-small" id="delivery_nlaf_manualbtn" tabindex="-1">
         <span>{l s='Enter address manually' mod='nladdressfiller'}&nbsp;<span class="icon-chevron-right right"></span></span>
       </button>
     </div>
     <div>
       <br/>
-      <button type="button" class="btn btn-default button button-small" id="delivery_mppc_autobtn" tabindex="-1">
+      <button type="button" class="btn btn-default button button-small" id="delivery_nlaf_autobtn" tabindex="-1">
         <span>{l s='Enter address automatically' mod='nladdressfiller'}&nbsp;<span class="icon-chevron-right right"></span></span>
       </button>
     </div>

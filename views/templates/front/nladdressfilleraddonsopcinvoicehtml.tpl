@@ -16,22 +16,22 @@
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *}
 {strip}
-  <p class="required text mppc_autocomplete_invoice">
-    <label for="mppc_postcode_invoice">{l s='Postcode' mod='nladdressfiller'}
+  <p class="required text nlaf_autocomplete_invoice">
+    <label for="nlaf_postcode_invoice">{l s='Postcode' mod='nladdressfiller'}
       <sup>*</sup>
     </label>
-    <input class="is_required form-control mpauto_invoice mppc_postcode_invoice" type="text"
-           id="mppc_postcode_invoice" name="mppc_postcode_invoice"
+    <input class="is_required form-control mpauto_invoice nlaf_postcode_invoice" type="text"
+           id="nlaf_postcode_invoice" name="nlaf_postcode_invoice"
            placeholder="{$nladdressfiller_zelarg_postcode|escape:'htmlall':'UTF-8'}">
     <span class="validity"></span>
     <span class="sample_text ex_blur" style="display:none;">{$nladdressfiller_zelarg_postcode|escape:'htmlall':'UTF-8'}</span>
   </p>
-  <p class="required text mppc_autocomplete_invoice">
-    <label for="mppc_housenr_invoice">{l s='House number + addition' mod='nladdressfiller'}
+  <p class="required text nlaf_autocomplete_invoice">
+    <label for="nlaf_housenr_invoice">{l s='House number + addition' mod='nladdressfiller'}
       <sup>*</sup>
     </label>
-    <input class="is_required form-control mpauto_invoice" type="text" id="mppc_housenr_invoice"
-           name="mppc_housenr_invoice" placeholder="{$nladdressfiller_zelarg_housenr|escape:'htmlall':'UTF-8'}">
+    <input class="is_required form-control mpauto_invoice" type="text" id="nlaf_housenr_invoice"
+           name="nlaf_housenr_invoice" placeholder="{$nladdressfiller_zelarg_housenr|escape:'htmlall':'UTF-8'}">
     <span class="validity"></span>
   </p>
   <p class="text mpresults-invoice-container">
@@ -39,15 +39,15 @@
     <input class="ui-input-text ui-body-c" type="text" id="mpresults_invoice" style="opacity: 0.7;pointer-events: none;">
   </p>
   {if $nladdressfiller_enable_man}
-    <p class="text mppc_autocomplete_invoice">
-      <label for="mppc_manualbtn_invoice"></label>
-      <button type="button" class="button mpbtn" id="mppc_manualbtn_invoice" tabindex="-1">
+    <p class="text nlaf_autocomplete_invoice">
+      <label for="nlaf_manualbtn_invoice"></label>
+      <button type="button" class="button mpbtn" id="nlaf_manualbtn_invoice" tabindex="-1">
         {l s='Enter address manually' mod='nladdressfiller'}
       </button>
     </p>
-    <p class="text mppc_manualcomplete_invoice">
-      <label for="mppc_autobtn_invoice"></label>
-      <button type="button" class="button mpbtn" id="mppc_autobtn_invoice" tabindex="-1">
+    <p class="text nlaf_manualcomplete_invoice">
+      <label for="nlaf_autobtn_invoice"></label>
+      <button type="button" class="button mpbtn" id="nlaf_autobtn_invoice" tabindex="-1">
         {l s='Enter address automatically' mod='nladdressfiller'}
       </button>
     </p>

@@ -32,10 +32,10 @@
       window.nladdressfiller.animDuration = 'fast';
 
       function deliveryAutoFill() {
-        $('#mppc_manualbtn').show();
-        $('#mppc_autobtn').hide();
+        $('#nlaf_manualbtn').show();
+        $('#nlaf_autobtn').hide();
 
-        $('#mppc_autocomplete').show(function () {
+        $('#nlaf_autocomplete').show(function () {
           $('#address1').parent().hide();
           $('#postcode').parent().hide();
           $('#city').parent().hide();
@@ -46,10 +46,10 @@
       }
 
       function deliveryManualFill() {
-        $('#mppc_manualbtn').hide();
-        $('#mppc_autobtn').show();
+        $('#nlaf_manualbtn').hide();
+        $('#nlaf_autobtn').show();
 
-        $('#mppc_autocomplete').hide(function () {
+        $('#nlaf_autocomplete').hide(function () {
           $('#address1').attr('type', 'text');
           $('#postcode').attr('type', 'text');
           $('#city').attr('type', 'text');
@@ -60,9 +60,9 @@
       }
 
       function invoiceAutoFill() {
-        $('#mppc_manualbtn_invoice').show();
-        $('#mppc_autobtn_invoice').hide();
-        $('#mppc_autocomplete_invoice').show(function () {
+        $('#nlaf_manualbtn_invoice').show();
+        $('#nlaf_autobtn_invoice').hide();
+        $('#nlaf_autocomplete_invoice').show(function () {
           $('#address1_invoice').parent().hide();
           $('#postcode_invoice').parent().hide();
           $('#city_invoice').parent().hide();
@@ -70,9 +70,9 @@
       }
 
       function invoiceManualFill() {
-        $('#mppc_manualbtn_invoice').hide();
-        $('#mppc_autobtn_invoice').show();
-        $('#mppc_autocomplete_invoice').hide(function () {
+        $('#nlaf_manualbtn_invoice').hide();
+        $('#nlaf_autobtn_invoice').show();
+        $('#nlaf_autocomplete_invoice').hide(function () {
           $('#address1_invoice').parent().show();
           $('#postcode_invoice').parent().show();
           $('#city_invoice').parent().show();
@@ -140,13 +140,13 @@
         });
 
         // If manual checkbox changes
-        $('#mppc_manualbtn')
+        $('#nlaf_manualbtn')
           .click(deliveryManualFill);
-        $('#mppc_autobtn')
+        $('#nlaf_autobtn')
           .click(deliveryAutoFill);
-        $('#mppc_manualbtn_invoice')
+        $('#nlaf_manualbtn_invoice')
           .click(invoiceManualFill);
-        $('#mppc_autobtn_invoice')
+        $('#nlaf_autobtn_invoice')
           .click(invoiceAutoFill);
 
         // Delay function
@@ -170,9 +170,9 @@
         }
 
         $('.mpauto').keyup(function () {
-          var postcode = $('#mppc_postcode').val().replace(/\s/g, "");
-          var housenr = $('#mppc_housenr').val().replace(/(^\d+)(.*?$)/i, '$1');
-          var addition = $('#mppc_housenr').val().replace(/(^\d+)(.*?$)/i, '$2');
+          var postcode = $('#nlaf_postcode').val().replace(/\s/g, "");
+          var housenr = $('#nlaf_housenr').val().replace(/(^\d+)(.*?$)/i, '$1');
+          var addition = $('#nlaf_housenr').val().replace(/(^\d+)(.*?$)/i, '$2');
 
           if (postcode.length >= 6 && housenr.length != 0) {
             if (window.nladdressfiller.xhr != null && typeof window.nladdressfiller.xhr.abort === 'function') {
@@ -214,9 +214,9 @@
         });
 
         $('.mpauto_invoice').keyup(function () {
-          var postcode = $('#mppc_postcode_invoice').val().replace(/\s/g, "");
-          var housenr = $('#mppc_housenr_invoice').val().replace(/(^\d+)(.*?$)/i, '$1');
-          var addition = $('#mppc_housenr_invoice').val().replace(/(^\d+)(.*?$)/i, '$2');
+          var postcode = $('#nlaf_postcode_invoice').val().replace(/\s/g, "");
+          var housenr = $('#nlaf_housenr_invoice').val().replace(/(^\d+)(.*?$)/i, '$1');
+          var addition = $('#nlaf_housenr_invoice').val().replace(/(^\d+)(.*?$)/i, '$2');
 
           if (postcode.length >= 6 && housenr.length != 0) {
             if (window.nladdressfiller.xhr != null && typeof window.nladdressfiller.xhr.abort === 'function') {

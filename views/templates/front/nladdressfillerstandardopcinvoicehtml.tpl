@@ -17,18 +17,18 @@
 *}
 {strip}
   <div id="nladdressfiller_invoice">
-    <div id="mppc_autocomplete_invoice">
+    <div id="nlaf_autocomplete_invoice">
       <div class="required form-group" style="display: block;">
-        <label for="mppc_postcode_invoice">{l s='Postcode' mod='nladdressfiller'}
+        <label for="nlaf_postcode_invoice">{l s='Postcode' mod='nladdressfiller'}
           <sup>*</sup>
         </label>
-        <input class="is_required form-control mpauto_invoice" type="text" id="mppc_postcode_invoice">
+        <input class="is_required form-control mpauto_invoice" type="text" id="nlaf_postcode_invoice">
       </div>
       <div class="required form-group" style="display: block;">
-        <label for="mppc_housenr_invoice">{l s='House number + addition' mod='nladdressfiller'}
+        <label for="nlaf_housenr_invoice">{l s='House number + addition' mod='nladdressfiller'}
           <sup>*</sup>
         </label>
-        <input class="is_required form-control mpauto_invoice" type="text" id="mppc_housenr_invoice">
+        <input class="is_required form-control mpauto_invoice" type="text" id="nlaf_housenr_invoice">
       </div>
       <br/>
 
@@ -42,13 +42,13 @@
     <p>
       {if $nladdressfiller_enable_man}
         <div>
-          <button type="button" class="btn btn-default button button-small" id="mppc_manualbtn_invoice" tabindex="-1">
+          <button type="button" class="btn btn-default button button-small" id="nlaf_manualbtn_invoice" tabindex="-1">
             <span>{l s='Enter address manually' mod='nladdressfiller'}&nbsp;<span class="icon-chevron-right right"></span></span>
           </button>
         </div>
         <div>
           <br/>
-          <button type="button" class="btn btn-default button button-small" id="mppc_autobtn_invoice" tabindex="-1">
+          <button type="button" class="btn btn-default button button-small" id="nlaf_autobtn_invoice" tabindex="-1">
             <span>{l s='Enter address automatically' mod='nladdressfiller'}&nbsp;<span class="icon-chevron-right right"></span></span>
           </button>
         </div>
