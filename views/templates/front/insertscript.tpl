@@ -1,0 +1,167 @@
+{*
+ * Copyright (C) 2017-2018 thirty bees
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.md
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@thirtybees.com so we can send you a copy immediately.
+ *
+ * @author    thirty bees <contact@thirtybees.com>
+ * @copyright 2017-2018 thirty bees
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *
+*}
+<script type="text/javascript" data-cfsync="false">
+  (function () {
+    function initFiller() {
+      if (typeof $ === 'undefined') {
+        setTimeout(initFiller, 100);
+
+        return;
+      }
+
+      window.nladdressfiller = window.nladdressfiller || { };
+      window.nladdressfiller.nlIso = '{$nladdressfiller_nl_iso|escape:'javascript':'UTF-8'}';
+      window.nladdressfiller.moduleLink = '{$nladdressfiller_module_link|escape:'javascript':'UTF-8'}';
+      window.nladdressfiller.lastCall = 0;
+      window.nladdressfiller.resultsColor = 'black';
+      window.nladdressfiller.animDuration = 'fast';
+
+      function autoFill() {
+        $('#mppc_manualbtn').parent().show();
+        $('#mppc_autobtn').parent().hide();
+
+        $('.mppc_autocomplete').show(window.nladdressfiller.animDuration, function () {
+          $('#address1').parent().hide(window.nladdressfiller.animDuration);
+          $('#postcode').parent().hide(window.nladdressfiller.animDuration);
+          $('#city').parent().hide(window.nladdressfiller.animDuration);
+          $('#address1').attr('type', 'hidden');
+          $('#postcode').attr('type', 'hidden');
+          $('#city').attr('type', 'hidden');
+        });
+      }
+
+      function manualFill() {
+        $('#mppc_manualbtn').parent().hide();
+        $('#mppc_autobtn').parent().show();
+
+        $('.mppc_autocomplete').hide(window.nladdressfiller.animDuration, function () {
+          $('#address1').attr('type', 'text');
+          $('#postcode').attr('type', 'text');
+          $('#city').attr('type', 'text');
+          $('#address1').parent().show(window.nladdressfiller.animDuration);
+          $('#postcode').parent().show(window.nladdressfiller.animDuration);
+          $('#city').parent().show(window.nladdressfiller.animDuration);
+        });
+      }
+
+
+      var initMP = function () {
+        // Show/hide autofill
+        $('#address1').parent().before($('#nladdressfiller'));
+        $('#lastname').parent().after($('#uniform-id_country').parent());
+
+        var postcodehider;
+
+        // If selected country is 'nl'
+        if ($('#id_country').val() == window.nladdressfiller.nlIso) {
+          $('#nladdressfiller').show(window.nladdressfiller.animDuration);
+          autoFill();
+
+        } else {
+          if (typeof postcodehider !== 'undefined') {
+            clearTimeout(postcodehider);
+          }
+          $('#nladdressfiller').hide(window.nladdressfiller.animDuration);
+          manualFill();
+        }
+
+        // If country selectbox changes
+        $('#id_country').change(function () {
+          if ($(this).val() == window.nladdressfiller.nlIso) {
+            $('#nladdressfiller').show(window.nladdressfiller.animDuration);
+            autoFill();
+            setTimeout(function () {
+              $('#postcode').parent().hide();
+            }, 1000);
+          }
+          else {
+            $('#nladdressfiller').hide(window.nladdressfiller.animDuration);
+            manualFill();
+          }
+        });
+
+        $('#nladdressfiller').show();
+
+        // Capture results color
+        window.nladdressfiller.resultsColor = $('#mpresults').css('color');
+
+        // If manual checkbox changes
+        $('#mppc_manualbtn')
+          .click(manualFill);
+        $('#mppc_autobtn')
+          .click(autoFill);
+
+        if (/[?&]id_address/.test(location.href)) {
+          setTimeout(manualFill, 100);
+        } else {
+          autoFill();
+        }
+
+        $('.mpauto').keyup(function () {
+          var postcode = $('#mppc_postcode').val().replace(/\s/g, "");
+          var housenr = $('#mppc_housenr').val().replace(/(^\d+)(.*?$)/i, '$1');
+          var addition = $('#mppc_housenr').val().replace(/(^\d+)(.*?$)/i, '$2');
+
+          if (postcode.length >= 6 && housenr.length != 0) {
+            if (window.nladdressfiller.xhr != null && typeof window.nladdressfiller.xhr.abort === 'function') {
+              window.nladdressfiller.xhr.abort();
+            }
+            window.nladdressfiller.xhr = $.ajax({
+              url: window.nladdressfiller.moduleLink,
+              type: 'POST',
+              dataType: 'json',
+              data: {
+                postcode: postcode,
+                huisnummer: housenr,
+                toevoeging: addition
+              },
+              success: function (data) {
+                if (typeof data.result !== 'undefined' &&
+                  typeof data.result.street !== 'undefined' &&
+                  typeof data.result.houseNumber !== 'undefined' &&
+                  typeof data.result.city !== 'undefined') {
+                  $('#address1').val(data.result['street'] + ' ' + data.result['houseNumber'] + addition);
+                  $('#city').val(data.result['city']);
+                  $('#postcode').val(data.result['postcode']);
+                  $('#mpresults').html(
+                    data.result['street'] + ' ' + data.result['houseNumber'] + addition + '<br>' +
+                    data.result['postcode'] + '<br>' + data.result['city']
+                  );
+                } else if (data.result['message']) {
+                  $('#mpresults').html(
+                    '<div class="pcnl_error">' + data.result['message'] +
+                    '</div>'
+                  );
+                }
+              }
+            });
+          }
+        });
+      };
+
+      $(document).ready(function () {
+        $('#address1').after('{{include file="./nladdressfillerhtml.tpl"}|escape:'javascript':'UTF-8'}');
+        initMP();
+        autoFill();
+      });
+    }
+
+    initFiller();
+  }());
+</script>
