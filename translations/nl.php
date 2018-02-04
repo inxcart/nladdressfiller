@@ -32,7 +32,7 @@ $_MODULE['<{nladdressfiller}prestashop>indexing_23b22e5755ee83f55a0650a48ec00ab6
 $_MODULE['<{nladdressfiller}prestashop>indexing_a82be0f551b8708bc08eb33cd9ded0cf'] = 'Informatie';
 $_MODULE['<{nladdressfiller}prestashop>indexing_f31bbdd1b3e85bccd652680e16935819'] = 'Bron';
 $_MODULE['<{nladdressfiller}prestashop>indexing_d2237ecb71ec1b0a3c33c832e362b96b'] = 'Versie beschikbaar';
-$_MODULE['<{nladdressfiller}prestashop>indexing_7f85de51a2b6c873c7a9d73f2160d775'] = 'Geïndexeerde versie';
+$_MODULE['<{nladdressfiller}prestashop>indexing_7f85de51a2b6c873c7a9d73f2160d775'] = 'Versie geïndexeerd';
 $_MODULE['<{nladdressfiller}prestashop>indexing_88183b946cc5f0e8c96b2e66e1c74a7e'] = 'Onbekend';
 $_MODULE['<{nladdressfiller}prestashop>indexing_f07b58b0c029f3cbd74d72d54de47ded'] = 'Aantal adressen';
 $_MODULE['<{nladdressfiller}prestashop>indexing_46b5f8c58b679b4243cbdb5749642c86'] = 'Voortgang';
