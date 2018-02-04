@@ -34,6 +34,7 @@ class nladdressfillerPostcodeajaxModuleFrontController extends ModuleFrontContro
     {
         $postcode = Tools::getValue('postcode');
         $houseNumber = Tools::getValue('huisnummer');
+        $houseNumberAddition = Tools::getValue('huisnummersuffix');
 
         if ($postcode && $houseNumber) {
             $result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow(
@@ -42,13 +43,15 @@ class nladdressfillerPostcodeajaxModuleFrontController extends ModuleFrontContro
                     ->from('nladdressfiller_postcodes')
                     ->where('`postcode` = \''.pSQL($postcode).'\'')
                     ->where('`number` = '.(int) $houseNumber)
+                    ->where('`suffix` = \''.pSQL($houseNumberAddition).'\' OR `suffix` = \'\'')
+                    ->orderBy('`suffix` DESC')
             );
             if ($result) {
                 die(json_encode([
                     'success' => true,
                     'result'  => [
                         'houseNumber'         => $result['number'],
-                        'houseNumberAddition' => '',
+                        'houseNumberAddition' => $result['suffix'],
                         'postcode'            => $result['postcode'],
                         'street'              => $result['street'],
                         'city'                => $result['city'],
@@ -59,8 +62,7 @@ class nladdressfillerPostcodeajaxModuleFrontController extends ModuleFrontContro
         die(json_encode([
             'success' => false,
             'result'  => [
-                'lastCall' => Tools::getValue('lastCall'),
-                'message'  => $this->module->l('Address not found. Please try again.'),
+                'message' => $this->module->l('Address not found. Please try again.'),
             ],
         ]));
     }

@@ -54,18 +54,21 @@ if (!isset($_GET['skipbag'])) {
         $xml->registerXPathNamespace('product_LVC', 'http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-producten-lvc/v20090901');
         $xml->registerXPathNamespace('selecties-extract', 'http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-selecties/v20090901');
         foreach ($xml->xpath('//xb:producten/product_LVC:LVC-product/bag_LVC:Nummeraanduiding') as $nummerAanduiding) {
-            if (!isset($nummerAanduiding->xpath('./bag_LVC:postcode')[0])
-                || !empty($nummerAanduiding->xpath('./bag_LVC:huisnummertoevoeging')[0])
-            ) {
+            if (!isset($nummerAanduiding->xpath('./bag_LVC:postcode')[0])) {
                 continue;
             }
 
-            $number = (string) $nummerAanduiding->xpath('./bag_LVC:huisnummer')[0];
             $postcode = (string) $nummerAanduiding->xpath('./bag_LVC:postcode')[0];
-            $numberDesignations["{$postcode}{$number}"] = [
+            $number = (string) $nummerAanduiding->xpath('./bag_LVC:huisnummer')[0];
+            $suffix = (string) (isset($nummerAanduiding->xpath('./bag_LVC:huisnummertoevoeging')[0])
+                ? trim($nummerAanduiding->xpath('./bag_LVC:huisnummertoevoeging')[0])
+                : ''
+            );
+            $numberDesignations["{$postcode}{$number}{$suffix}"] = [
                 (string) $nummerAanduiding->xpath('./bag_LVC:gerelateerdeOpenbareRuimte/bag_LVC:identificatie')[0],
-                $number,
                 $postcode,
+                $number,
+                $suffix,
             ];
         }
         list(, $docId) = explode('-', basename($numfile, '.xml'));
@@ -183,9 +186,26 @@ foreach ($allCities as &$city) {
 unset($city);
 
 // In chunks
-if (!file_exists(__DIR__.'/output')) {
-    mkdir(__DIR__.'/output');
+function rrmdir($src)
+{
+    $dir = opendir($src);
+    while (false !== ($file = readdir($dir))) {
+        if (($file != '.') && ($file != '..')) {
+            $full = $src.'/'.$file;
+            if (is_dir($full)) {
+                rrmdir($full);
+            } else {
+                unlink($full);
+            }
+        }
+    }
+    closedir($dir);
+    rmdir($src);
 }
+
+
+rrmdir(__DIR__.'/output');
+mkdir(__DIR__.'/output');
 if (isset($_GET['chunksize'])) {
     $chunkSize = (int) $_GET['chunksize'];
     $chunk = 1;
@@ -211,6 +231,7 @@ foreach ($allPostcodes as &$postcode) {
     $newPostcode = [
         $postcode[1],
         $postcode[2],
+        $postcode[3],
         $street,
         $city,
     ];
@@ -230,10 +251,13 @@ foreach ($allPostcodes as &$postcode) {
 fclose($postcodeFp);
 
 // Generate manifest if chunked
-if ($chunkSize) {
-    file_put_contents(__DIR__.'/output/manifest.json', json_encode([
-        'date'      => substr($bagdate, 0, 2).'-'.substr($bagdate, 2, 2).'-'.substr($bagdate, 4, 4),
-        'chunks'    => (int) $chunk,
-        'chunksize' => (int) $chunkSize,
-    ]));
-}
+file_put_contents(__DIR__.'/output/manifest.json', json_encode([
+    'source'    => [
+        'name'    => 'Het Kadaster',
+        'website' => 'https://kadaster.nl',
+    ],
+    'license'   => 'http://creativecommons.org/publicdomain/zero/1.0/deed.nl',
+    'date'      => substr($bagdate, 0, 2).'-'.substr($bagdate, 2, 2).'-'.substr($bagdate, 4, 4),
+    'chunks'    => (int) $chunk,
+    'chunksize' => (int) $chunkSize,
+], JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));

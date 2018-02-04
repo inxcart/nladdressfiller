@@ -26,14 +26,22 @@ if (!defined('_TB_VERSION_')) {
  */
 class nladdressfiller extends Module
 {
-    const FRONTOFFICE = 'PCNL_FRONTOFFICE';
-    const BACKOFFICE = 'PCNL_BACKOFFICE';
-    const FRONTOFFICE_DISABLE_MANUAL_FILL = 'PCNL_FRONTOFFICE_DISABLE_MAN';
-    const BACKOFFICE_DISABLE_MANUAL_FILL = 'PCNL_BACKOFFICE_DISABLE_MAN';
-    const ZELARG_POSTCODE = 'PCNL_ZELARG_POSTCODE';
-    const ZELARG_HOUSENR = 'PCNL_ZELARG_HOUSENR';
-    const DEV_MODE = 'PCNL_DEV_MODE';
-    const DEV_MODE_IPS = 'PCNL_DEV_MODE_IPS';
+    const FRONTOFFICE = 'NLAF_FRONTOFFICE';
+    const BACKOFFICE = 'NLAF_BACKOFFICE';
+    const FRONTOFFICE_DISABLE_MANUAL_FILL = 'NLAF_FRONTOFFICE_DISABLE_MAN';
+    const BACKOFFICE_DISABLE_MANUAL_FILL = 'NLAF_BACKOFFICE_DISABLE_MAN';
+    const ZELARG_POSTCODE = 'NLAF_ZELARG_POSTCODE';
+    const ZELARG_HOUSENR = 'NLAF_ZELARG_HOUSENR';
+    const DEV_MODE = 'NLAF_DEV_MODE';
+    const DEV_MODE_IPS = 'NLAF_DEV_MODE_IPS';
+
+    const MANIFEST = 'NLAF_MANIFEST';
+    const MANIFEST_LAST_CHECK = 'NLAF_LAST_MAN_CHECK';
+    const MANIFEST_CHECK_INTERVAL = 86400;
+    const INDEXED = 'NLAF_INDEXED';
+    const DATASET_INDEXED = 'NLAF_DATASET_INDEXED';
+    const CHUNK_SIZE = 1000;
+    const CURRENT_CHUNK = 'NLAF_CURRENT_CHUNK';
 
     /**
      * nladdressfiller constructor.
@@ -56,6 +64,11 @@ class nladdressfiller extends Module
 
         $this->displayName = $this->l('Address auto lookup with postcode + number');
         $this->description = $this->l('Enables address autofill with the help of postcode + house number');
+
+        // Only check the manifest from the back office
+        if (!empty(Context::getContext()->employee->id)) {
+            $this->checkManifest();
+        }
     }
 
     /**
@@ -84,6 +97,8 @@ class nladdressfiller extends Module
                     return false;
                 }
             }
+
+            Configuration::updateValue(static::FRONTOFFICE, true);
 
             return true;
         }
@@ -147,7 +162,23 @@ class nladdressfiller extends Module
             $this->context->controller->confirmations[] = $this->l('Settings updated');
         }
 
-        return $this->display(__FILE__, 'views/templates/admin/configure.tpl').$this->displayConfigForm();
+        if (Tools::isSubmit('refreshAddressData')) {
+            $this->retrieveManifest();
+        }
+
+        $manifest = json_decode(Configuration::get(static::MANIFEST), true);
+        $this->context->smarty->assign([
+            'manifest'       => $manifest,
+            'link'           => $this->context->link,
+            'indexed'        => min($this->getIndexed(), $this->getTotal()),
+            'total'          => $this->getTotal(),
+            'datasetIndexed' => Configuration::get(static::DATASET_INDEXED),
+            'iso'            => $this->context->language->iso_code,
+        ]);
+
+        return $this->display(__FILE__, 'views/templates/admin/configure.tpl')
+            .$this->display(__FILE__, 'views/templates/admin/indexing.tpl')
+            .$this->displayConfigForm();
     }
 
     /**
@@ -569,6 +600,87 @@ class nladdressfiller extends Module
     }
 
     /**
+     * Ajax - Restart indexing
+     *
+     * @throws PrestaShopException
+     */
+    public function ajaxProcessRestartIndex()
+    {
+        $this->dropTables();
+        $this->installTables();
+        Configuration::updateValue(static::CURRENT_CHUNK, 1);
+        $manifest = json_decode(Configuration::get(static::MANIFEST));
+        Configuration::updateValue(static::DATASET_INDEXED, $manifest->date);
+
+        die(json_encode([
+            'success' => true,
+            'indexed' => 0,
+            'total'   => $this->getTotal(),
+        ]));
+    }
+
+    /**
+     * Ajax - Continue indexing
+     *
+     * @throws PrestaShopException
+     */
+    public function ajaxProcessContinueIndex()
+    {
+        $chunk = str_pad(max(1, (int) Configuration::get(static::CURRENT_CHUNK)), 5, '0', STR_PAD_LEFT);
+        try {
+            $addresses = (string) (new \GuzzleHttp\Client([
+                'timeout'  => 60,
+                'verify'   => _PS_TOOL_DIR_.'cacert.pem',
+                'base_uri' => 'https://thirtybees.github.io/nladdressfiller/data/',
+            ]))->get("postcodes{$chunk}.csv")->getBody();
+        } catch (Exception $e) {
+            die(json_encode([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]));
+        }
+        $addresses = array_map('str_getcsv', explode("\n", $addresses));
+        foreach (array_chunk($addresses, 300) as $chunk) {
+            $insert = [];
+            foreach ($chunk as $address) {
+                $insert[] = [
+                    'postcode' => pSQL($address[0]),
+                    'number'   => (int) $address[1],
+                    'suffix'   => pSQL($address[2]),
+                    'street'   => pSQL($address[3]),
+                    'city'     => pSQL($address[4]),
+                ];
+            }
+            try {
+                Db::getInstance()->insert(
+                    'nladdressfiller_postcodes',
+                    $insert,
+                    false,
+                    true,
+                    Db::INSERT_IGNORE
+                );
+            } catch (Exception $e) {
+                if (strpos(strtolower($e->getMessage()), 'duplicate') === false) {
+                    die(json_encode([
+                        'success' => false,
+                        'message' => $e->getMessage(),
+                    ]));
+                }
+            }
+        }
+        unset($chunk);
+
+        $indexed = (int) Configuration::get(static::CURRENT_CHUNK) * static::CHUNK_SIZE;
+        Configuration::updateValue(static::CURRENT_CHUNK, (int) Configuration::get(static::CURRENT_CHUNK) + 1);
+        Configuration::updateValue(static::INDEXED, $indexed);
+        die(json_encode([
+            'success' => true,
+            'indexed' => $indexed,
+            'total'   => $this->getTotal(),
+        ]));
+    }
+
+    /**
      * Get version of module
      *
      * @param string $module Module name
@@ -578,11 +690,136 @@ class nladdressfiller extends Module
      */
     protected function getModuleVersion($module)
     {
-        $sql = new DbQuery();
-        $sql->select('m.`version`');
-        $sql->from('module', 'm');
-        $sql->where('m.`name` = \''.pSQL($module).'\'');
+        return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
+            (new DbQuery())
+                ->select('m.`version`')
+                ->from('module', 'm')
+                ->where('m.`name` = \''.pSQL($module).'\'')
+        );
+    }
 
-        return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($sql);
+    /**
+     * Check webhooks + update info
+     *
+     * @return void
+     *
+     * @since 2.0.0
+     * @throws PrestaShopException
+     */
+    protected function checkManifest()
+    {
+        $lastCheck = (int) Configuration::get(static::MANIFEST_LAST_CHECK);
+
+        if ((time() > ($lastCheck + static::MANIFEST_CHECK_INTERVAL)) || !Configuration::get(static::MANIFEST)) {
+            // Time to update the manifest
+            $this->retrieveManifest();
+            Configuration::updateValue(static::MANIFEST_LAST_CHECK, time());
+        }
+    }
+
+    /**
+     * Retrieve BAG manifest
+     *
+     * @return void
+     *
+     * @since 2.0.0
+     */
+    protected function retrieveManifest()
+    {
+        try {
+            Configuration::updateValue(static::MANIFEST, (string) (new \GuzzleHttp\Client([
+                'timeout' => 60,
+                'verify'  => _PS_TOOL_DIR_.'cacert.pem',
+            ]))->get('https://thirtybees.github.io/nladdressfiller/data/manifest.json')->getBody());
+        } catch (Exception $e) {
+            $this->context->controller->errors[] = $e->getMessage();
+        }
+    }
+
+    /**
+     * Get amount of indexed addresses
+     *
+     * @return int
+     * @throws PrestaShopException
+     */
+    protected function getIndexed()
+    {
+        $indexedFromCache = (int) Configuration::get(static::INDEXED);
+        if (!$indexedFromCache) {
+            try {
+                $indexed = (int) Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
+                    (new DbQuery())
+                        ->select('COUNT(*)')
+                        ->from('nladdressfiller_postcodes')
+                );
+                Configuration::updateValue(static::INDEXED, $indexed);
+
+                return $indexed;
+            } catch (Exception $e) {
+                return -1;
+            }
+        }
+
+        return $indexedFromCache;
+    }
+
+    /**
+     * Get total amount of addresses available
+     *
+     * @return float|int
+     * @throws PrestaShopException
+     */
+    protected function getTotal()
+    {
+        if (!Configuration::get(static::MANIFEST)) {
+            return -1;
+        }
+
+        $manifest = json_decode(Configuration::get(static::MANIFEST));
+        if (!$manifest || empty($manifest->chunks) || empty($manifest->chunksize)) {
+            return -1;
+        }
+
+        return (int) $manifest->chunks * (int) $manifest->chunksize - (int) $manifest->chunksize;
+    }
+
+    /**
+     * Install tables
+     *
+     * @return void
+     */
+    protected function installTables()
+    {
+        try {
+            Db::getInstance()->execute(
+                'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'nladdressfiller_postcodes`
+(
+	`postcode` CHAR(6)         NOT NULL,
+	`number`   INT(8) UNSIGNED NOT NULL,
+	`suffix`   CHAR(6)         NOT NULL,
+	`street`   VARCHAR(127)    NOT NULL,
+	`city`     VARCHAR(127)    NOT NULL,
+	PRIMARY KEY (`postcode`, `number`, `suffix`)
+)
+ENGINE=InnoDB
+CHARSET=utf8'
+            );
+        } catch (Exception $e) {
+            Logger::addLog("{$this->displayName}: {$e->getMessage()}");
+        }
+    }
+
+    /**
+     * Drop tables
+     *
+     * @return void
+     */
+    protected function dropTables()
+    {
+        try {
+            Db::getInstance()->execute('DROP TABLE `'._DB_PREFIX_.'nladdressfiller_postcodes`');
+        } catch (Exception $e) {
+            Logger::addLog("{$this->displayName}: {$e->getMessage()}");
+        }
     }
 }
