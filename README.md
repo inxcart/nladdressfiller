@@ -1,5 +1,4 @@
 # NL Address Filler
-![NL Address Filler](/logo.png)
 
 ## About
 
