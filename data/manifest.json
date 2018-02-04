@@ -1,5 +1,10 @@
 {
-  "date": "2018-01-08",
-  "chunks": 7716,
-  "chunksize": 1000
+    "source": {
+        "name": "Het Kadaster",
+        "website": "https://kadaster.nl"
+    },
+    "license": "http://creativecommons.org/publicdomain/zero/1.0/deed.nl",
+    "date": "08-01-2018",
+    "chunks": 8411,
+    "chunksize": 1000
 }
