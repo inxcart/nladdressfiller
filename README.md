@@ -1,5 +1,5 @@
 # NL Address Filler
-![logo.png](Logo)
+![Logo](logo.png)
 
 ## About
 
@@ -7,7 +7,7 @@
 
 Auto fill the streetname and city field when the postcode + number are known and speed up the checkout process.
 
-![addressfiller.gif](Auto fill addresses)
+![Auto fill addresses](addressfiller.gif)
 
 ### Installing the module
 
