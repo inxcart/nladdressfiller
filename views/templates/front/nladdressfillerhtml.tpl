@@ -31,7 +31,7 @@
         <input class="is_required form-control mpauto" type="text" id="nlaf_housenr">
       </div>
       <br/>
-      <div>
+      <div class="nlaf-form-group">
         <div class="well nladdressfiller-well">
           <span id="mpresults" class="mpresults16"></span>
         </div>
@@ -40,12 +40,12 @@
     </div>
     <p>
       {if $nladdressfiller_enable_man || Tools::isSubmit('id_address')}
-    <div>
+    <div class="nlaf-btn-group">
       <button type="button" class="btn btn-default button button-small" id="nlaf_manualbtn" tabindex="-1">
         <span>{l s='Enter address manually' mod='nladdressfiller'}&nbsp;<span class="icon-chevron-right right"></span></span>
       </button>
     </div>
-    <div>
+    <div class="nlaf-btn-group">
       <br/>
       <button type="button" class="btn btn-default button button-small" id="nlaf_autobtn" tabindex="-1">
         <span>{l s='Enter address automatically' mod='nladdressfiller'}&nbsp;<span class="icon-chevron-right right"></span></span>

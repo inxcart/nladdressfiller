@@ -99,5 +99,6 @@ build/bagsql/opr
 build/bagsql/wpl
 !build/bagsql/wpl/index.php
 build/bagsql/postcodes.csv
+build/bagsql/output/
 *nladdressfiller*.zip
 

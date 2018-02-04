@@ -33,13 +33,13 @@
       window.nladdressfiller.animDuration = 'fast';
 
       function autoFill() {
-        $('#nlaf_manualbtn').parent().show();
-        $('#nlaf_autobtn').parent().hide();
+        $('#nlaf_manualbtn').closest('.nlaf-btn-group').show();
+        $('#nlaf_autobtn').closest('.nlaf-btn-group').hide();
 
         $('.nlaf_autocomplete').show(window.nladdressfiller.animDuration, function () {
-          $('#address1').parent().hide(window.nladdressfiller.animDuration);
-          $('#postcode').parent().hide(window.nladdressfiller.animDuration);
-          $('#city').parent().hide(window.nladdressfiller.animDuration);
+          $('#address1').closest('.form-group').hide(window.nladdressfiller.animDuration);
+          $('#postcode').closest('.form-group').hide(window.nladdressfiller.animDuration);
+          $('#city').closest('.form-group').hide(window.nladdressfiller.animDuration);
           $('#address1').attr('type', 'hidden');
           $('#postcode').attr('type', 'hidden');
           $('#city').attr('type', 'hidden');
@@ -47,24 +47,24 @@
       }
 
       function manualFill() {
-        $('#nlaf_manualbtn').parent().hide();
-        $('#nlaf_autobtn').parent().show();
+        $('#nlaf_manualbtn').closest('.nlaf-btn-group').hide();
+        $('#nlaf_autobtn').closest('.nlaf-btn-group').show();
 
         $('.nlaf_autocomplete').hide(window.nladdressfiller.animDuration, function () {
           $('#address1').attr('type', 'text');
           $('#postcode').attr('type', 'text');
           $('#city').attr('type', 'text');
-          $('#address1').parent().show(window.nladdressfiller.animDuration);
-          $('#postcode').parent().show(window.nladdressfiller.animDuration);
-          $('#city').parent().show(window.nladdressfiller.animDuration);
+          $('#address1').closest('.form-group').show(window.nladdressfiller.animDuration);
+          $('#postcode').closest('.form-group').show(window.nladdressfiller.animDuration);
+          $('#city').closest('.form-group').show(window.nladdressfiller.animDuration);
         });
       }
 
 
       var initMP = function () {
         // Show/hide autofill
-        $('#address1').parent().before($('#nladdressfiller'));
-        $('#lastname').parent().after($('#uniform-id_country').parent());
+        $('#address1').closest('.form-group').before($('#nladdressfiller'));
+        $('#lastname').closest('.form-group').after($('#uniform-id_country').closest('.form-group'));
 
         var postcodehider;
 
@@ -87,7 +87,7 @@
             $('#nladdressfiller').show(window.nladdressfiller.animDuration);
             autoFill();
             setTimeout(function () {
-              $('#postcode').parent().hide();
+              $('#postcode').closest('.form-group').hide();
             }, 1000);
           }
           else {

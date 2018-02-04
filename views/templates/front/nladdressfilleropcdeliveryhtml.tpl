@@ -31,8 +31,7 @@
         <input class="is_required form-control mpauto" type="text" id="delivery_nlaf_housenr">
       </div>
       <br/>
-
-      <div>
+      <div class="nlaf-form-group">
         <div class="well nladdressfiller-well" >
           <span id="delivery_mpresults" class="mpresults16"></span>
         </div>
@@ -41,12 +40,12 @@
     </div>
     <p>
       {if $nladdressfiller_enable_man}
-    <div>
+    <div class="nlaf-btn-group">
       <button type="button" class="btn btn-default button button-small" id="delivery_nlaf_manualbtn" tabindex="-1">
         <span>{l s='Enter address manually' mod='nladdressfiller'}&nbsp;<span class="icon-chevron-right right"></span></span>
       </button>
     </div>
-    <div>
+    <div class="nlaf-btn-group">
       <br/>
       <button type="button" class="btn btn-default button button-small" id="delivery_nlaf_autobtn" tabindex="-1">
         <span>{l s='Enter address automatically' mod='nladdressfiller'}&nbsp;<span class="icon-chevron-right right"></span></span>
