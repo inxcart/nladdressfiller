@@ -16,7 +16,7 @@ foreach ($argv as $arg) {
         $_GET[$e[0]] = true;
     }
 }
-
+$bagdate = '';
 if (!isset($_GET['skipbag'])) {
     $xmlReader = new XMLReader();
     $numberDesignations = [];
@@ -33,6 +33,12 @@ if (!isset($_GET['skipbag'])) {
         if (in_array($numfile, ['.', '..'])) {
             continue;
         }
+
+        if (!$bagdate) {
+            preg_match("/NUM(\d+)-/", $numfile, $m);
+            $bagdate = $m[1];
+        }
+
         // Open the file
         $xml = simplexml_load_file(__DIR__."/../bag/num/$numfile");
         $xml->registerXPathNamespace('xs', 'http://www.w3.org/2001/XMLSchema');
@@ -150,6 +156,16 @@ if (!isset($_GET['skipbag'])) {
 }
 
 // Continue from files
+
+// Check BAG date first before continuing
+if (!$bagdate && isset($bagdate)) {
+    $bagdate = $_GET['bagdate'];
+}
+if (!$bagdate) {
+    fwrite(STDERR, "ERROR: No BAG date found\n");
+    exit(1);
+}
+
 $streets = [];
 $allPostcodes = array_map('str_getcsv', file('data/num.csv'));
 $allStreets = array_map('str_getcsv', file('data/opr.csv'));
@@ -213,7 +229,7 @@ fclose($postcodeFp);
 // Generate manifest if chunked
 if ($chunkSize) {
     file_put_contents(__DIR__.'/output/manifest.json', json_encode([
-        'date'      => '2018-01-08',
+        'date'      => substr($bagdate, 0, 2).'-'.substr($bagdate, 2, 2).'-'.substr($bagdate, 4, 4),
         'chunks'    => (int) $chunk,
         'chunksize' => (int) $chunkSize,
     ]));
