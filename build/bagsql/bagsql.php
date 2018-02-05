@@ -228,6 +228,10 @@ foreach ($allPostcodes as &$postcode) {
     }
     $city = $cities[$streets[$postcode[0]][2]][1];
 
+    if (!$postcode[1] || !$postcode[2] || !$street || !$city) {
+        continue;
+    }
+
     $newPostcode = [
         $postcode[1],
         $postcode[2],
