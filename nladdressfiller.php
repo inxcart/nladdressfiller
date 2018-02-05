@@ -17,6 +17,10 @@
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use Psr\Http\Message\ResponseInterface;
+
 if (!defined('_TB_VERSION_')) {
     return;
 }
@@ -41,6 +45,7 @@ class nladdressfiller extends Module
     const INDEXED = 'NLAF_INDEXED';
     const DATASET_INDEXED = 'NLAF_DATASET_INDEXED';
     const CHUNK_SIZE = 1000;
+    const MAX_CONCURRENT = 5;
     const CURRENT_CHUNK = 'NLAF_CURRENT_CHUNK';
 
     /**
@@ -626,58 +631,78 @@ class nladdressfiller extends Module
      */
     public function ajaxProcessContinueIndex()
     {
-        $chunk = str_pad(max(1, (int) Configuration::get(static::CURRENT_CHUNK)), 5, '0', STR_PAD_LEFT);
-        try {
-            $addresses = (string) (new \GuzzleHttp\Client([
-                'timeout'  => 60,
-                'verify'   => _PS_TOOL_DIR_.'cacert.pem',
-                'base_uri' => 'https://thirtybees.github.io/nladdressfiller/data/',
-            ]))->get("postcodes{$chunk}.csv")->getBody();
-        } catch (Exception $e) {
-            die(json_encode([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ]));
-        }
-        $addresses = array_map('str_getcsv', explode("\n", $addresses));
-        foreach (array_chunk($addresses, 340) as $chunk) {
-            $insert = [];
-            foreach ($chunk as $address) {
-                $insert[] = [
-                    'postcode' => pSQL($address[0]),
-                    'number'   => (int) $address[1],
-                    'suffix'   => pSQL($address[2]),
-                    'street'   => pSQL($address[3]),
-                    'city'     => pSQL($address[4]),
-                ];
-            }
-            try {
-                Db::getInstance()->insert(
-                    'nladdressfiller_postcodes',
-                    $insert,
-                    false,
-                    true,
-                    Db::INSERT_IGNORE
-                );
-            } catch (Exception $e) {
-                if (strpos(strtolower($e->getMessage()), 'duplicate') === false) {
+        $currentChunk = (int) Configuration::get(static::CURRENT_CHUNK);
+        $manifest = json_decode(Configuration::get(static::MANIFEST));
+        $client = new Client([
+            'timeout'  => 60,
+            'verify'   => _PS_TOOL_DIR_.'cacert.pem',
+            'base_uri' => 'https://thirtybees.github.io/nladdressfiller/data/',
+        ]);
+        $promises = [];
+        $requestsFinished = 0;
+        $maxRequests = min(static::MAX_CONCURRENT, (int) $manifest->chunks - $currentChunk);
+        for ($i = (int) Configuration::get(static::CURRENT_CHUNK); $i < $currentChunk + $maxRequests; $i++) {
+            $chunk = str_pad(max(1, (int) Configuration::get(static::CURRENT_CHUNK)), 5, '0', STR_PAD_LEFT);
+            $promises[] = $client->getAsync("postcodes{$chunk}.csv")->then(
+                function (ResponseInterface $res) use (&$requestsFinished, $maxRequests, $currentChunk) {
+                    $addresses = array_map('str_getcsv', explode("\n", (string) $res->getBody()));
+                    foreach (array_chunk($addresses, 340) as $chunk) {
+                        $insert = [];
+                        foreach ($chunk as $address) {
+                            $insert[] = [
+                                'postcode' => pSQL($address[0]),
+                                'number'   => (int) $address[1],
+                                'suffix'   => pSQL($address[2]),
+                                'street'   => pSQL($address[3]),
+                                'city'     => pSQL($address[4]),
+                            ];
+                        }
+                        try {
+                            Db::getInstance()->insert(
+                                'nladdressfiller_postcodes',
+                                $insert,
+                                false,
+                                true,
+                                Db::INSERT_IGNORE
+                            );
+                        } catch (Exception $e) {
+                            if (strpos(strtolower($e->getMessage()), 'duplicate') === false) {
+                                die(json_encode([
+                                    'success' => false,
+                                    'message' => $e->getMessage(),
+                                ]));
+                            }
+                        }
+                    }
+
+                    $requestsFinished++;
+                    if ($requestsFinished >= $maxRequests) {
+                        $indexed = ((int) $currentChunk + (int) $maxRequests - 1) * static::CHUNK_SIZE;
+                        Configuration::updateValue(static::CURRENT_CHUNK, (int) $currentChunk + (int) $maxRequests);
+                        Configuration::updateValue(static::INDEXED, $indexed);
+                        die(json_encode([
+                            'success' => true,
+                            'indexed' => $indexed,
+                            'total'   => $this->getTotal(),
+                        ]));
+                    }
+                },
+                function (RequestException $e) {
                     die(json_encode([
                         'success' => false,
                         'message' => $e->getMessage(),
                     ]));
                 }
-            }
+            );
         }
-        unset($chunk);
-
-        $indexed = (int) Configuration::get(static::CURRENT_CHUNK) * static::CHUNK_SIZE;
-        Configuration::updateValue(static::CURRENT_CHUNK, (int) Configuration::get(static::CURRENT_CHUNK) + 1);
-        Configuration::updateValue(static::INDEXED, $indexed);
-        die(json_encode([
-            'success' => true,
-            'indexed' => $indexed,
-            'total'   => $this->getTotal(),
-        ]));
+        try {
+            GuzzleHttp\Promise\unwrap($promises);
+        } catch (Throwable $e) {
+            die(json_encode([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]));
+        }
     }
 
     /**
