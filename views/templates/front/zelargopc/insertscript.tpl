@@ -19,11 +19,27 @@
 <script type="text/javascript">
   (function () {
     function initFiller() {
-      if (typeof $ === 'undefined') {
+      if (typeof $ === 'undefined' || typeof window.paymentModuleConfirm !== 'function') {
         setTimeout(initFiller, 100);
 
         return;
       }
+
+      // jQuery bind first plugin
+      $.fn.bindUp = function(type, fn) {
+
+        type = type.split(/\s+/);
+
+        this.each(function() {
+          var len = type.length;
+          while( len-- ) {
+            $(this).bind(type[len], fn);
+
+            var evt = $.data(this, 'events')[type[len].replace(/\..+$/, '')];
+            evt.splice(0, 0, evt.pop());
+          }
+        });
+      };
 
       window.nladdressfiller = window.nladdressfiller || {};
       window.nladdressfiller.nlIso = '{$nladdressfiller_nl_iso|escape:'javascript':'UTF-8'}';
@@ -178,6 +194,13 @@
         }
       }
 
+      function paymentModuleConfirm(event) {
+        deliveryManualFill();
+        invoiceManualFill();
+
+        window.paymentModuleConfirm(event);
+      }
+
       /**
        * Initialize address filler
        */
@@ -205,20 +228,20 @@
         fields_definition.nlaf_postcode = [true, 'isPostcode', 6];
         fields_definition.nlaf_postcode_invoice = [true, 'isPostcode', 6];
 
-        $('#nlaf_postcode').blur(function () {
+        $('#nlaf_postcode').on('keyup change' , function () {
           validateFieldAndDisplayInline($(this));
         });
-        $('#nlaf_housenr').blur(function () {
+        $('#nlaf_housenr').on('keyup change', function () {
           validateFieldAndDisplayInline($(this));
         });
-        $('#nlaf_postcode_invoice').blur(function () {
+        $('#nlaf_postcode_invoice').on('keyup change', function () {
           validateFieldAndDisplayInline($(this));
         });
-        $('#nlaf_housenr_invoice').blur(function () {
+        $('#nlaf_housenr_invoice').on('keyup change', function () {
           validateFieldAndDisplayInline($(this));
         });
 
-        $('.mpauto').change(function () {
+        $('.mpauto').on('keyup change', function () {
           var postcode = $('#nlaf_postcode').val().replace(/\s/g, "");
           var housenr = $('#nlaf_housenr').val().replace(/(^\d+)(.*?$)/i, '$1');
           var addition = $('#nlaf_housenr').val().replace(/(^\d+)(.*?$)/i, '$2');
@@ -250,7 +273,6 @@
                     addition + ', ' + data.result['postcode'] +
                     ', ' + data.result['city']
                   );
-                  deliveryManualFill();
                 } else if (data.result['message']) {
                   $('#mpresults').css('color', 'red');
                   $('#mpresults').val(data.result['message']);
@@ -265,7 +287,7 @@
           var housenr = $('#nlaf_housenr_invoice').val().replace(/(^\d+)(.*?$)/i, '$1');
           var addition = $('#nlaf_housenr_invoice').val().replace(/(^\d+)(.*?$)/i, '$2');
 
-          if (postcode.length >= 6 && housenr.length != 0) {
+          if (postcode.length >= 6 && housenr.length) {
             if (window.nladdressfiller != null && typeof window.nladdressfiller.xhr.abort === 'function') {
               window.nladdressfiller.xhr.abort();
             }
@@ -292,7 +314,6 @@
                     data.result['street'] + ' ' + data.result['houseNumber'] +
                     addition + ', ' + data.result['postcode'] + ', ' + data.result['city']
                   );
-                  invoiceManualFill();
                 } else if (data.result['message']) {
                   $('#mpresults_invoice').css('color', 'red');
                   $('#mpresults_invoice').val(data.result['message']);
@@ -322,10 +343,15 @@
       }
 
       $(document).ready(function () {
-        $('#id_country').parent().after('{{include file="./nladdressfilleraddonsopcdeliveryhtml.tpl"}|escape:'javascript':'UTF-8'}');
-        $('#id_country_invoice').parent().after('{{include file="./nladdressfilleraddonsopcinvoicehtml.tpl"}|escape:'javascript':'UTF-8'}');
+        $('#id_country').parent().after('{{include file="./nladdressfiller-delivery-html.tpl"}|escape:'javascript':'UTF-8'}');
+        $('#id_country_invoice').parent().after('{{include file="./nladdressfiller-invoice-html.tpl"}|escape:'javascript':'UTF-8'}');
         setTimeout(function () {
           initMP();
+          $('input.confirm_button')[0].onclick = paymentModuleConfirm;
+          $('#SubmitLoginOpc').bindUp('click', function () {
+            deliveryManualFill();
+            invoiceManualFill();
+          });
         }, 610); // After 600ms, the OPC tries to show the postcode
       });
     }

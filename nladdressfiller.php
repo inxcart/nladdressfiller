@@ -446,11 +446,17 @@ class nladdressfiller extends Module
         }
         if (Configuration::get(static::FRONTOFFICE)) {
             $this->context->smarty->assign('nladdressfiller_enable_man', !Configuration::get(static::FRONTOFFICE_DISABLE_MANUAL_FILL));
-            if (is_a($this->context->controller->php_self, 'OrderOpcController') &&
+            if (is_a($this->context->controller, 'OrderOpcController') &&
                 Module::isEnabled('onepagecheckout')) {
                 // Zelarg One Page Checkout module
                 $this->context->controller->addJquery();
-                $this->context->controller->addCSS($this->_path.'/views/css/nladdressfiller.css');
+                if (Configuration::get('OPC_TWO_COLUMN_OPC')) {
+                    $this->context->controller->addCSS($this->_path.'/views/css/zelargopc/nladdressfiller-twocolumns.css');
+                } elseif (Configuration::get('OPC_THREE_COLUMN_OPC')) {
+                    $this->context->controller->addCSS($this->_path.'/views/css/zelargopc/nladdressfiller-threecolumns.css');
+                } else {
+                    $this->context->controller->addCSS($this->_path.'/views/css/zelargopc/nladdressfiller.css');
+                }
                 $this->context->smarty->assign([
                     'nladdressfiller_nl_iso'          => (int) Country::getByIso('NL'),
                     'nladdressfiller_module_link'     => $this->context->link->getModuleLink('nladdressfiller', 'postcodeajax', [], Tools::usingSecureMode()),
@@ -458,13 +464,13 @@ class nladdressfiller extends Module
                     'nladdressfiller_zelarg_housenr'  => Configuration::get(static::ZELARG_HOUSENR, (int) $this->context->language->id),
                 ]);
 
-                return $this->display(__FILE__, '/views/templates/front/insertaddonsopcscript.tpl');
+                return $this->display(__FILE__, '/views/templates/front/zelargopc/insertscript.tpl');
             } elseif (is_a($this->context->controller, 'OrderOpcController') &&
                 Module::isEnabled('onepagecheckoutps') &&
                 version_compare($this->getModuleVersion('onepagecheckoutps'), '2.0.0', '>=')) {
                 // One Page Checkout module by PresTeamShop
                 $this->context->controller->addJquery();
-                $this->context->controller->addCSS($this->_path.'/views/css/nladdressfiller.css');
+                $this->context->controller->addCSS($this->_path.'/views/css/ptsopc/nladdressfiller.css');
                 $this->context->smarty->assign([
                     'nladdressfiller_nl_iso'                  => (int) Country::getByIso('NL'),
                     'nladdressfiller_module_link'             => $this->context->link->getModuleLink('nladdressfiller', 'postcodeajax', [], Tools::usingSecureMode()),
@@ -478,58 +484,37 @@ class nladdressfiller extends Module
                     'nladdressfiller_parent'                  => true,
                 ]);
 
-                return $this->display(__FILE__, '/views/templates/front/insertopcpsscript.tpl');
+                return $this->display(__FILE__, '/views/templates/front/ptsopc/insertscript.tpl');
             } elseif (is_a($this->context->controller, 'OrderOpcController')) {
                 // thirty bees OPC
                 $this->context->controller->addJquery();
-                $this->context->controller->addCSS($this->_path.'/views/css/nladdressfiller.css');
+                $this->context->controller->addCSS($this->_path.'/views/css/stanardopc/nladdressfiller.css');
                 $this->context->smarty->assign([
                     'nladdressfiller_nl_iso'      => (int) Country::getByIso('NL'),
                     'nladdressfiller_module_link' => $this->context->link->getModuleLink('nladdressfiller', 'postcodeajax', [], Tools::usingSecureMode()),
                 ]);
 
-                return $this->display(__FILE__, '/views/templates/front/insertstandardopcscript.tpl');
+                return $this->display(__FILE__, '/views/templates/front/standardopc/insertscript.tpl');
             } elseif (is_a($this->context->controller, 'AddressController')) {
                 // thirty bees address page
                 $this->context->controller->addJquery();
-                $this->context->controller->addCSS($this->_path.'/views/css/nladdressfiller.css');
+                $this->context->controller->addCSS($this->_path.'/views/css/standard/nladdressfiller.css');
                 $this->context->smarty->assign([
                     'nladdressfiller_nl_iso'      => (int) Country::getByIso('NL'),
                     'nladdressfiller_module_link' => $this->context->link->getModuleLink('nladdressfiller', 'postcodeajax', [], Tools::usingSecureMode()),
                 ]);
 
-                return $this->display(__FILE__, '/views/templates/front/insertscript.tpl');
+                return $this->display(__FILE__, '/views/templates/front/standard/insertscript.tpl');
             } elseif (is_a($this->context->controller, 'AuthController')) {
                 // thirty bees guest checkout on 5 step order page
                 $this->context->controller->addJquery();
-                $this->context->controller->addCSS($this->_path.'/views/css/nladdressfiller.css');
+                $this->context->controller->addCSS($this->_path.'/views/css/standard/nladdressfiller.css');
                 $this->context->smarty->assign([
                     'nladdressfiller_nl_iso'      => (int) Country::getByIso('NL'),
                     'nladdressfiller_module_link' => $this->context->link->getModuleLink('nladdressfiller', 'postcodeajax', [], Tools::usingSecureMode()),
                 ]);
 
-                return $this->display(__FILE__, '/views/templates/front/insertscript.tpl');
-            } elseif (isset($this->context->controller->name_module) &&
-                $this->context->controller->name_module == 'onepagecheckoutps') {
-                // One page checkout by PresTeamShop
-                $this->context->controller->addJquery();
-                $this->context->controller->addCSS($this->_path.'/views/css/nladdressfiller.css');
-                $this->context->smarty->assign(
-                    [
-                        'nladdressfiller_nl_iso'                  => (int) Country::getByIso('NL'),
-                        'nladdressfiller_module_link'             => $this->context->link->getModuleLink('nladdressfiller', 'postcodeajax', [], Tools::usingSecureMode()),
-                        'nladdressfiller_delivery_address_field'  => '#tr_delivery_address1',
-                        'nladdressfiller_delivery_postcode_field' => '#tr_delivery_postcode',
-                        'nladdressfiller_delivery_city_field'     => '#tr_delivery_city',
-                        'nladdressfiller_invoice_address_field'   => '#tr_invoice_address1',
-                        'nladdressfiller_invoice_postcode_field'  => '#tr_invoice_postcode',
-                        'nladdressfiller_invoice_city_field'      => '#tr_invoice_city',
-                        'nladdressfiller_opc_bootstrap'           => false,
-                        'nladdressfiller_mpparent'                => false,
-                    ]
-                );
-
-                return $this->display(__FILE__, '/views/templates/front/insertopcpsscript.tpl');
+                return $this->display(__FILE__, '/views/templates/front/standard/insertscript.tpl');
             }
         }
 

@@ -258,8 +258,8 @@
       }
 
       $(document).ready(function () {
-        $('#address1').parent().before('{{include file="./nladdressfillerstandardopcdeliveryhtml.tpl"}|escape:'javascript':'UTF-8'}');
-        $('#address1_invoice').parent().before('{{include file="./nladdressfillerstandardopcinvoicehtml.tpl"}|escape:'javascript':'UTF-8'}');
+        $('#address1').parent().before('{{include file="./nladdressfiller-delivery-html.tpl"}|escape:'javascript':'UTF-8'}');
+        $('#address1_invoice').parent().before('{{include file="./nladdressfiller-invoice-html.tpl"}|escape:'javascript':'UTF-8'}');
         initMP();
         if (window.nladdressfiller.logged == '1') {
           deliveryManualFill();

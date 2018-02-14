@@ -1,0 +1,121 @@
+/*
+ * Copyright (C) 2017-2018 thirty bees
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.md
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@thirtybees.com so we can send you a copy immediately.
+ *
+ * @author    thirty bees <contact@thirtybees.com>
+ * @copyright 2017-2018 thirty bees
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*
+*/
+.mpresults16 {
+    text-align:left;
+    height:45px;
+    width:45%;
+    font-weight:bold;
+}
+.mpresults16 > .pcnl_error{
+    color:red;
+}
+
+.mpbtn:hover, .mpbtn:focus {
+    color: #333333;
+    text-decoration: none;
+    background-position: 0 -15px;
+    -webkit-transition: background-position 0.1s linear;
+    -moz-transition: background-position 0.1s linear;
+    -o-transition: background-position 0.1s linear;
+    transition: background-position 0.1s linear;
+}
+
+.mpbtn:hover, .mpbtn:focus, .mpbtn:active, .mpbtn.active, .mpbtn.disabled, .mpbtn[disabled] {
+    color: #333333;
+    background-color: #e6e6e6;
+}
+button.mpbtn, input[type="submit"].mpbtn {
+}
+.mpbtn {
+    display: inline-block;
+    padding: 4px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333333;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+    background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
+    background-repeat: repeat-x;
+    border: 1px solid #cccccc;
+    border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    border-bottom-color: #b3b3b3;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+#nlaf_manualbtn span, #nlaf_autobtn span {
+    display: inline-block;
+}
+
+#nlaf_manualbtn, #nlaf_autobtn {
+    width: 290px !important;
+}
+
+.nladdressfiller-well {
+    width: 290px !important;
+}
+
+@media (max-width: 767px) {
+    #nlaf_manualbtn, #nlaf_autobtn {
+        width: 250px !important;
+    }
+
+    .nladdressfiller-well {
+        width: 250px !important;
+    }
+}
+
+@media (max-width: 479px) {
+    #nlaf_manualbtn, #nlaf_autobtn {
+        width: 86% !important;
+        margin-left: 15px;
+    }
+
+    .nladdressfiller-well {
+        width: 86% !important;
+        margin-left: 15px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    #nlaf_manualbtn, #nlaf_autobtn {
+        width: 240px !important;
+        margin-left: 5px;
+    }
+
+    .nladdressfiller-well {
+        width: 240px !important;
+        margin-left: 5px;
+    }
+}

@@ -253,11 +253,11 @@
 
       $(document).ready(function () {
         {if $nladdressfiller_opc_bootstrap}
-        $(window.nladdressfiller.deliveryAddressField).before('{{include file="./nladdressfilleropcpsdeliverybootstraphtml.tpl"}|escape:'javascript':'UTF-8'}');
-        $(window.nladdressfiller.invoiceAddressField).before('{{include file="./nladdressfilleropcpsinvoicebootstraphtml.tpl"}|escape:'javascript':'UTF-8'}');
+          $(window.nladdressfiller.deliveryAddressField).before('{{include file="./nladdressfiller-delivery-html.tpl"}|escape:'javascript':'UTF-8'}');
+          $(window.nladdressfiller.invoiceAddressField).before('{{include file="./nladdressfiller-invoice-html.tpl.tpl"}|escape:'javascript':'UTF-8'}');
         {else}
-        $(window.nladdressfiller.deliveryAddressField).before('{{include file="./nladdressfilleropcpsdeliveryhtml.tpl"}|escape:'javascript':'UTF-8'}');
-        $(window.nladdressfiller.invoiceAddressField).before('{{include file="./nladdressfilleropcpsinvoicehtml.tpl"}|escape:'javascript':'UTF-8'}');
+          $(window.nladdressfiller.deliveryAddressField).before('{{include file="./nladdressfiller-delivery-html.tpl"}|escape:'javascript':'UTF-8'}');
+          $(window.nladdressfiller.invoiceAddressField).before('{{include file="./nladdressfiller-invoice-html.tpl.tpl"}|escape:'javascript':'UTF-8'}');
         {/if}
 
         initMP();
